@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 apps/.DS_Store
 config/.env
+.DS_Store
