@@ -3,6 +3,9 @@ from django.contrib.auth.models import (
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.db import models
 from django.contrib.auth.models import BaseUserManager
+from ..places.models import Place
+from ..places.managers import PlaceUserManager
+from ..actions.models import Action
 
 
 # Create your models here.
@@ -38,7 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # places = models.ManyToManyField(Place, through='PlaceUser')
+    places = models.ManyToManyField(Place, through='PlaceUser')
     auth_provider = models.CharField(
         max_length=255, blank=False,
         null=False, default='email')
@@ -60,3 +63,24 @@ class User(AbstractBaseUser, PermissionsMixin):
             'refresh': str(refresh),
             'access': str(refresh.access_token)
         }
+
+
+class PlaceUser(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    place = models.ForeignKey(Place, on_delete=models.CASCADE)
+    is_admin = models.BooleanField(default=False)
+    actions = models.ManyToManyField(Action, through='ActionPlace')
+
+    objects = PlaceUserManager()
+
+    class Meta:
+        db_table = "place_user"
+
+
+class ActionPlace(models.Model):
+    place_user = models.ForeignKey(PlaceUser, on_delete=models.CASCADE)
+    action = models.ForeignKey(Action, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "action_place"

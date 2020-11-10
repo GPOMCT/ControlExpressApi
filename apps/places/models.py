@@ -9,6 +9,9 @@ class Place(models.Model):
     description = models.CharField(max_length=30, default=None)
     account = models.ForeignKey(Account, on_delete=models.DO_NOTHING, default=None)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         db_table = "places"
         verbose_name = "Place"

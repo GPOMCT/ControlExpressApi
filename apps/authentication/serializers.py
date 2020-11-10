@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from .models import User
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
@@ -7,6 +6,9 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+
+from .models import User, PlaceUser
+from ..places.serializers import UserPlaceSerializer
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -52,18 +54,18 @@ class LoginSerializer(serializers.ModelSerializer):
     tokens = serializers.SerializerMethodField()
 
     def get_tokens(self, obj):
-        # user = User.objects.get(email=obj['email'])
-        # refresh = AuthTokenObtainPairSerializer.get_token(user)
-        # return {
-        #     'refresh': str(refresh),
-        #     'access': str(refresh.access_token)
-        # }
         user = User.objects.get(email=obj['email'])
-
+        refresh = AuthTokenObtainPairSerializer.get_token(user)
         return {
-            'refresh': user.tokens()['refresh'],
-            'access': user.tokens()['access']
+            'refresh': str(refresh),
+            'access': str(refresh.access_token)
         }
+        # user = User.objects.get(email=obj['email'])
+        #
+        # return {
+        #     'refresh': user.tokens()['refresh'],
+        #     'access': user.tokens()['access']
+        # }
 
     class Meta:
         model = User
@@ -155,13 +157,18 @@ class LogoutSerializer(serializers.Serializer):
             self.fail('bad_token')
 
 
-# class AuthTokenObtainPairSerializer(TokenObtainPairSerializer):
-#     @classmethod
-#     def get_token(cls, user):
-#         token = super().get_token(user)
-#
-#         # Add custom claims
-#         token['Demo'] = "Aqui van los datos de los lugares"
-#         # ...
-#
-#         return token
+class AuthTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        query = PlaceUser.objects.place_user(user)
+        list_places = UserPlaceSerializer(query, many=True).data
+
+        # Add custom claims
+        token['username'] = user.username
+        token['email'] = user.email
+        token['suit'] = list_places
+        # ...
+
+        return token
