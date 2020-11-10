@@ -90,7 +90,6 @@ class LoginSerializer(serializers.ModelSerializer):
 
         return {
             'email': user.email,
-            'username': user.username,
             'tokens': user.tokens
         }
 
@@ -163,12 +162,11 @@ class AuthTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         query = PlaceUser.objects.place_user(user)
-        list_places = UserPlaceSerializer(query, many=True).data
+        list_regions = UserPlaceSerializer(query, many=True).data
 
         # Add custom claims
         token['username'] = user.username
         token['email'] = user.email
-        token['suit'] = list_places
-        # ...
+        token['regions'] = list_regions
 
         return token
