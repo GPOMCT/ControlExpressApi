@@ -39,22 +39,28 @@ ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'users.User'
 # Application definition
 
-INSTALLED_APPS = [
-    'rest_framework',
-    'rest_framework_simplejwt.token_blacklist',
+DJANGO_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #apps
+)
+
+LOCAL_APPS = (
     'apps.users',
     'apps.accounts',
     'apps.devices',
     'apps.places',
     'apps.actions',
-]
+)
+
+THIRD_PARTY_APPS = (
+    'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
+)
+INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
