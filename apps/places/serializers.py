@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Place
-from ..authentication.models import PlaceUser, User, ActionPlace
+from ..users.models import PlaceUser, User, ActionPlace
 from ..actions.serializers import ActionSerializer
 
 

@@ -36,7 +36,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 ALLOWED_HOSTS = ['*']
 
-AUTH_USER_MODEL = 'authentication.User'
+AUTH_USER_MODEL = 'users.User'
 # Application definition
 
 INSTALLED_APPS = [
@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #apps
-    'apps.authentication',
+    'apps.users',
     'apps.accounts',
     'apps.devices',
     'apps.places',

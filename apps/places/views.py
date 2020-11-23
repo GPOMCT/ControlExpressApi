@@ -1,8 +1,8 @@
 from rest_framework import generics, status, views, permissions
 from rest_framework.response import Response
 from .models import Place
-from ..authentication.models import User, PlaceUser
-from ..authentication.permissions import IsOwner
+from ..users.models import User, PlaceUser
+from ..users.permissions import IsOwner
 from .serializers import PlaceSerializer, UserPlaceSerializer
 
 

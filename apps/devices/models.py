@@ -9,6 +9,9 @@ class Device(models.Model):
     sn = models.CharField(max_length=30, default=None)
     place = models.ForeignKey(Place, on_delete=models.CASCADE, default=None)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         db_table = "devices"
         verbose_name = "Device"

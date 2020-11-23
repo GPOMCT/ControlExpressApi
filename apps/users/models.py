@@ -2,35 +2,10 @@ from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin)
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.db import models
-from django.contrib.auth.models import BaseUserManager
 from ..places.models import Place
 from ..places.managers import PlaceUserManager
 from ..actions.models import Action
-
-
-# Create your models here.
-class UserManager(BaseUserManager):
-
-    def create_user(self, username, email, password=None):
-        if username is None:
-            raise TypeError('Users should have a username')
-        if email is None:
-            raise TypeError('Users should have a Email')
-
-        user = self.model(username=username, email=self.normalize_email(email))
-        user.set_password(password)
-        user.save()
-        return user
-
-    def create_superuser(self, username, email, password=None):
-        if password is None:
-            raise TypeError('Password should not be none')
-
-        user = self.create_user(username, email, password)
-        user.is_superuser = True
-        user.is_staff = True
-        user.save()
-        return user
+from .managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -73,6 +48,9 @@ class PlaceUser(models.Model):
 
     objects = PlaceUserManager()
 
+    def __str__(self):
+        return self.id
+
     class Meta:
         db_table = "place_user"
 
@@ -81,6 +59,9 @@ class ActionPlace(models.Model):
     place_user = models.ForeignKey(PlaceUser, on_delete=models.CASCADE)
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.id
 
     class Meta:
         db_table = "action_place"

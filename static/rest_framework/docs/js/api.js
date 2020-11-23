@@ -64,7 +64,7 @@ function formEntries (form) {
 }
 
 $(function () {
-  var $selectedAuthentication = $('#selected-authentication')
+  var $selectedAuthentication = $('#selected-users')
   var $authControl = $('#auth-control')
   var $authTokenModal = $('#auth_token_modal')
   var $authBasicModal = $('#auth_basic_modal')
@@ -198,21 +198,21 @@ $(function () {
       responseCallback: responseCallback
     }
 
-    // Setup authentication options.
+    // Setup users options.
     if (window.auth && window.auth.type === 'token') {
-      // Header authentication
+      // Header users
       options.auth = new coreapi.auth.TokenAuthentication({
         scheme: window.auth.scheme,
         token: window.auth.token
       })
     } else if (window.auth && window.auth.type === 'basic') {
-      // Basic authentication
+      // Basic users
       options.auth = new coreapi.auth.BasicAuthentication({
         username: window.auth.username,
         password: window.auth.password
       })
     } else if (window.auth && window.auth.type === 'session') {
-      // Session authentication
+      // Session users
       options.auth = new coreapi.auth.SessionAuthentication({
         csrfCookieName: 'csrftoken',
         csrfHeaderName: 'X-CSRFToken'
@@ -274,7 +274,7 @@ $(function () {
   })
 
   // Authentication: token
-  $('form.authentication-token-form').submit(function (event) {
+  $('form.users-token-form').submit(function (event) {
     event.preventDefault()
     var $form = $(this).closest('form')
     var scheme = $form.find('input#scheme').val()
@@ -291,7 +291,7 @@ $(function () {
   })
 
   // Authentication: basic
-  $('form.authentication-basic-form').submit(function (event) {
+  $('form.users-basic-form').submit(function (event) {
     event.preventDefault()
     var $form = $(this).closest('form')
     var username = $form.find('input#username').val()
@@ -308,7 +308,7 @@ $(function () {
   })
 
   // Authentication: session
-  $('form.authentication-session-form').submit(function (event) {
+  $('form.users-session-form').submit(function (event) {
     event.preventDefault()
     window.auth = {
       'type': 'session'
