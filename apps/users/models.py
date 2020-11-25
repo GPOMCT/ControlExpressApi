@@ -9,8 +9,18 @@ from .managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+
+    GENDER_CHOICES = (
+        ('M', 'MASCULINO'),
+        ('F', 'FEMENINO'),
+        ('O', 'OTROS')
+    )
+
     username = models.CharField(max_length=255, unique=True, db_index=True)
     email = models.EmailField(max_length=255, unique=True, db_index=True)
+    name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
