@@ -54,9 +54,12 @@ LOCAL_APPS = (
     'apps.devices',
     'apps.places',
     'apps.actions',
+    'apps.chat',
 )
 
 THIRD_PARTY_APPS = (
+    'channels_redis',
+    'channels',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
 )
@@ -91,7 +94,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
+# Channels
+ASGI_APPLICATION = 'config.routing.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
