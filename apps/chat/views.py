@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.shortcuts import HttpResponse
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 
 def index(request):
@@ -9,3 +12,12 @@ def room(request, room_name):
     return render(request, 'chat/room.html', {
         'room_name': room_name
     })
+
+
+def alarm(req):
+    layer = get_channel_layer()
+    async_to_sync(layer.group_send)('chat_ulises', {
+        'type': 'position_event',
+        'position': 'se supone que es una posision'
+    })
+    return HttpResponse('<p>Puto el que lo lea</p>')

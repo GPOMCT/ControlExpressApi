@@ -1,21 +1,5 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from channels.consumer import SyncConsumer
-
-
-class MqttConsumer(SyncConsumer):
-
-    def mqtt_sub(self, event):
-        topic = event['text']['topic']
-        payload = event['text']['payload']
-        # do something with topic and payload
-        print("topic: {0}, payload: {1}".format(topic, payload))
-
-    def mqtt_pub(self, event):
-        topic = event['text']['topic']
-        payload = event['text']['payload']
-        # do something with topic and payload
-        print("topic: {0}, payload: {1}".format(topic, payload))
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -57,6 +41,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         print(event)
         message = event['message']
+        print("hola perra")
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message
@@ -64,6 +49,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def position_event(self, event):
         message = event['position']
+        print("hola perra2")
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message
