@@ -59,7 +59,7 @@ class PlaceUser(models.Model):
     objects = PlaceUserManager()
 
     def __str__(self):
-        return self.id
+        return str(self.id) + ' - ' + self.user.email + ' - ' + self.place.name
 
     class Meta:
         db_table = "place_user"
@@ -71,7 +71,7 @@ class ActionPlace(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.id
+        return str(self.id) + ' - ' + self.action.name + ' - '
 
     class Meta:
         db_table = "action_place"

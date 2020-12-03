@@ -4,6 +4,12 @@ from ..places.models import Place
 
 # Create your models here.
 class Device(models.Model):
+    GENDER_CHOICES = (
+        ('Sonoff-mini', 'mini'),
+        ('Sonoff-basic', 'basic'),
+        ('Oter', 'otro')
+    )
+
     name = models.CharField(max_length=30)
     unique_id = models.CharField(max_length=30)
     sn = models.CharField(max_length=30, default=None)
